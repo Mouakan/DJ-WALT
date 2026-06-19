@@ -317,7 +317,7 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
 .foot-bot a{color:var(--muted)}.foot-bot a:hover{color:var(--gold)}
 
 /* ================= Floating ================= */
-.totop{position:fixed;right:20px;bottom:20px;z-index:80;width:46px;height:46px;border-radius:50%;background:var(--ink-2);
+.totop{position:fixed;right:22px;bottom:88px;z-index:80;width:44px;height:44px;border-radius:50%;background:var(--ink-2);
   border:1px solid var(--line-2);display:grid;place-items:center;cursor:pointer;opacity:0;visibility:hidden;
   transform:translateY(12px);transition:.4s var(--ease)}
 .totop.show{opacity:1;visibility:visible;transform:none}
@@ -372,6 +372,93 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
   .reveal{opacity:1;transform:none}.hero-eq span{transform:scaleY(.7)}
+}
+/* ================= AI ASSISTANT WIDGET ================= */
+.chat-launch{position:fixed;right:20px;bottom:20px;z-index:110;height:58px;padding:0 20px 0 16px;border:0;cursor:pointer;
+  border-radius:100px;display:flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  color:#231702;font-family:'Instrument Sans';font-weight:600;font-size:.95rem;
+  box-shadow:0 14px 34px -10px rgba(226,180,76,.6);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.chat-launch:hover{transform:translateY(-3px);box-shadow:0 20px 44px -12px rgba(226,180,76,.75)}
+.chat-launch svg{width:22px;height:22px}
+.chat-launch .ring{position:absolute;inset:0;border-radius:100px;border:2px solid var(--gold);opacity:0;animation:cring 2.4s ease-out infinite}
+@keyframes cring{0%{opacity:.6;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
+.chat-launch.hide{opacity:0;visibility:hidden;transform:scale(.7)}
+.chat-launch{white-space:nowrap;max-width:calc(100vw - 36px)}
+.chat-launch .lbl{overflow:hidden;text-overflow:ellipsis}
+.chat-launch .lbl-sm{display:none}
+
+.chat-bubble{position:fixed;right:20px;bottom:88px;z-index:109;max-width:min(248px,calc(100vw - 80px));
+  background:#fff;color:#19150f;padding:.75rem 1rem;border-radius:16px 16px 4px 16px;
+  box-shadow:0 18px 42px -16px rgba(0,0,0,.55);font-size:.88rem;line-height:1.45;font-weight:500;
+  opacity:0;visibility:hidden;transform:translateY(10px) scale(.96);transform-origin:bottom right;
+  transition:.4s var(--ease);cursor:pointer}
+.chat-bubble.show{opacity:1;visibility:visible;transform:none}
+.chat-bubble::after{content:"";position:absolute;right:26px;bottom:-6px;width:14px;height:14px;background:#fff;
+  transform:rotate(45deg);border-bottom-right-radius:3px}
+.chat-bubble .x{position:absolute;top:-9px;right:-9px;width:23px;height:23px;border-radius:50%;background:var(--ink-2);
+  color:#fff;border:1px solid var(--line-2);display:grid;place-items:center;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.chat-bubble .x:hover{background:#000}
+
+.chat-panel{position:fixed;right:20px;bottom:20px;z-index:111;width:374px;max-width:calc(100vw - 32px);height:560px;
+  max-height:calc(100svh - 40px);display:flex;flex-direction:column;background:var(--ink-2);border:1px solid var(--line-2);
+  border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.8);
+  opacity:0;visibility:hidden;transform:translateY(24px) scale(.97);transform-origin:bottom right;transition:.4s var(--ease)}
+.chat-panel.open{opacity:1;visibility:visible;transform:none}
+.chat-head{display:flex;align-items:center;gap:.8rem;padding:16px 18px;background:linear-gradient(135deg,#1a1407,#0d0b07);
+  border-bottom:1px solid var(--line)}
+.chat-ava{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(226,180,76,.3),rgba(226,180,76,.06));
+  border:1px solid var(--line-2);display:flex;align-items:flex-end;justify-content:center;gap:2px;padding-bottom:11px}
+.chat-ava i{width:3px;border-radius:2px;background:linear-gradient(var(--gold-2),var(--gold));display:block;animation:eq 1.1s var(--ease) infinite alternate}
+.chat-ava i:nth-child(1){height:8px;animation-delay:-.2s}.chat-ava i:nth-child(2){height:15px;animation-delay:-.5s}
+.chat-ava i:nth-child(3){height:11px;animation-delay:-.1s}.chat-ava i:nth-child(4){height:17px;animation-delay:-.6s}
+.chat-head .who b{display:block;color:#fff;font-family:'Bricolage Grotesque';font-size:1rem;line-height:1.1}
+.chat-head .who span{font-size:.76rem;color:#7fdc9f;display:flex;align-items:center;gap:.35rem}
+.chat-head .who span::before{content:"";width:7px;height:7px;border-radius:50%;background:#25D366;box-shadow:0 0 8px #25D366}
+.chat-close{margin-left:auto;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:34px;height:34px;
+  border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:.3s}
+.chat-close:hover{background:rgba(255,255,255,.12)}.chat-close svg{width:17px;height:17px}
+
+.chat-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:18px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.chat-body::-webkit-scrollbar{width:6px}.chat-body::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:6px}
+.chat-msg{max-width:82%;padding:.7rem .95rem;font-size:.9rem;line-height:1.5;border-radius:16px;overflow-wrap:anywhere;word-break:break-word;animation:msgIn .35s var(--ease) backwards}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chat-msg.bot{align-self:flex-start;background:var(--ink-3);border:1px solid var(--line);color:var(--text);border-bottom-left-radius:5px}
+.chat-msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#231702;font-weight:500;border-bottom-right-radius:5px}
+.chat-msg.recap{align-self:stretch;max-width:100%;background:linear-gradient(160deg,#1a1407,#0e0c07);border:1px solid var(--gold)}
+.chat-msg.recap b{color:var(--gold)}
+.chat-msg.recap ul{margin:.5rem 0 0}.chat-msg.recap li{padding:.18rem 0;color:#fff;font-size:.86rem}
+.chat-msg.recap li span{color:var(--muted)}
+.chat-typing{align-self:flex-start;display:flex;gap:4px;padding:.8rem 1rem;background:var(--ink-3);border:1px solid var(--line);border-radius:16px}
+.chat-typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typ 1.2s infinite}
+.chat-typing i:nth-child(2){animation-delay:.2s}.chat-typing i:nth-child(3){animation-delay:.4s}
+@keyframes typ{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+.chat-quick{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 18px 12px;max-height:34vh;overflow-y:auto}
+.chat-quick button{background:rgba(226,180,76,.08);border:1px solid var(--line-2);color:var(--text);font-size:.84rem;
+  padding:.5em 1em;border-radius:100px;cursor:pointer;transition:.25s;font-family:'Instrument Sans'}
+.chat-quick button:hover{background:var(--gold);color:#231702;border-color:var(--gold)}
+.chat-quick button.ghost{background:transparent;border-color:var(--line);color:var(--muted)}
+.chat-quick button.ghost:hover{background:rgba(255,255,255,.06);color:#fff;border-color:var(--line-2)}
+.chat-quick a.wa{background:#25D366;color:#06301a;border-color:#25D366;font-weight:600;display:inline-flex;align-items:center;gap:.4rem}
+.chat-quick a.wa svg{width:15px;height:15px}
+
+.chat-foot{display:flex;gap:.5rem;padding:12px 14px;border-top:1px solid var(--line);background:var(--ink-2)}
+.chat-foot input{flex:1;min-width:0;background:var(--ink-3);border:1px solid var(--line);border-radius:100px;padding:.7em 1em;color:#fff;
+  font-family:'Instrument Sans';font-size:16px;outline:none}
+.chat-foot input:focus{border-color:var(--gold)}
+.chat-foot button{width:42px;height:42px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  color:#231702;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:transform .25s}
+.chat-foot button:hover{transform:scale(1.08)}.chat-foot button svg{width:18px;height:18px}
+.chat-disc{font-size:.66rem;color:var(--muted);text-align:center;padding:0 18px 10px}
+
+@media(max-width:560px){
+  .chat-panel{right:8px;left:8px;bottom:8px;width:auto;height:calc(100svh - 16px);height:calc(100dvh - 16px);max-height:none;border-radius:18px}
+  .chat-foot{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  .chat-launch{right:14px;bottom:14px;padding:0 18px 0 14px}
+  .chat-launch .lbl-lg{display:none}
+  .chat-launch .lbl-sm{display:inline}
+  .chat-bubble{right:14px;bottom:80px}
+  .chat-bubble::after{right:24px}
 }
 </style>
 </head>
@@ -677,6 +764,34 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
   </a>
 </div>
+<!-- ================= AI ASSISTANT ================= -->
+<button class="chat-launch" id="chatLaunch" aria-label="Préparons votre événement">
+  <span class="ring" aria-hidden="true"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.1-5.4A8.5 8.5 0 1 1 21 11.5z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg>
+  <span class="lbl lbl-lg">Préparons votre événement 🎉</span>
+  <span class="lbl lbl-sm">Demande rapide 🎉</span>
+</button>
+
+<div class="chat-bubble" id="chatBubble" role="button" tabindex="0" aria-label="Préparons votre événement ensemble">
+  <button class="x" id="bubbleX" aria-label="Fermer la bulle">&times;</button>
+  👋 Préparons votre événement ensemble !
+</div>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Assistant DJ Walt">
+  <div class="chat-head">
+    <div class="chat-ava" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="who"><b>Assistant DJ Walt</b><span>En ligne · répond 24/7</span></div>
+    <button class="chat-close" id="chatClose" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-quick" id="chatQuick"></div>
+  <div class="chat-foot">
+    <input id="chatInput" type="text" placeholder="Écrivez votre message…" autocomplete="off" aria-label="Votre message">
+    <button id="chatSend" aria-label="Envoyer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+  <div class="chat-disc">Estimation indicative — tarif final confirmé par DJ Walt.</div>
+</div>
+
 <button class="totop" id="totop" aria-label="Retour en haut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
@@ -741,6 +856,150 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
     if(!lb.classList.contains('open'))return;
     if(e.key==='Escape')close();else if(e.key==='ArrowRight')show(idx+1);else if(e.key==='ArrowLeft')show(idx-1);
   });
+})();
+</script>
+<script>
+/* ===== Assistant DJ Walt — flux guidé, handoff WhatsApp (démo front-end) ===== */
+(function(){
+  var launch=document.getElementById('chatLaunch'),panel=document.getElementById('chatPanel'),
+      closeb=document.getElementById('chatClose'),body=document.getElementById('chatBody'),
+      quick=document.getElementById('chatQuick'),input=document.getElementById('chatInput'),
+      send=document.getElementById('chatSend');
+  if(!launch)return;
+  var WA="https://wa.me/33652627773?text=";
+
+  /* ⚙️ EXEMPLES de fourchettes — à remplacer par la vraie grille tarifaire de Walt */
+  var ESTIMATES={'Mariage':'600 – 900 €','Anniversaire':'350 – 550 €','Soirée privée':'400 – 600 €','Entreprise':'sur devis personnalisé','Autre':'sur devis personnalisé'};
+
+  var FLOW=[
+    {key:'type',bot:"Bonjour 👋 Je suis l'assistant de DJ Walt. En moins d'une minute je prépare votre demande. Quel type d'événement organisez-vous ?",
+      quick:[{l:'💍 Mariage',v:'Mariage'},{l:'🎂 Anniversaire',v:'Anniversaire'},{l:'🎉 Soirée privée',v:'Soirée privée'},{l:'🏢 Entreprise',v:'Entreprise'},{l:'✨ Autre',v:'Autre'}]},
+    {key:'precision',optional:true,
+      bot:function(s){return s.type==='Autre'
+        ?"Dites-m'en un peu plus sur votre événement si vous le souhaitez — ou passez."
+        :"Avec plaisir 🤩 Souhaitez-vous donner plus de détails sur votre événement ? (optionnel) — ou passez.";},
+      ph:'Précisez votre événement…'},
+    {key:'date',bot:"Top ! Pour quelle date ?",quick:[{l:'Pas encore fixée',v:'À définir'}],ph:'Ex : 14 juin 2026'},
+    {key:'city',bot:"Et où se déroule l'événement (ville ou code postal) ?",ph:'Ex : Évreux (27)'},
+    {key:'guests',bot:"Combien d'invités, environ ?",quick:[{l:'Moins de 50',v:'moins de 50'},{l:'50 à 100',v:'50 à 100'},{l:'100 à 200',v:'100 à 200'},{l:'Plus de 200',v:'plus de 200'}]},
+    {key:'details',optional:true,bot:"Souhaitez-vous ajouter un détail ? Ambiance, horaires, style musical, demandes spéciales… (ou passez)",ph:'Votre message…'},
+    {key:'source',bot:"Une dernière chose : comment avez-vous connu DJ Walt ?",
+      quick:[{l:'Google',v:'Google'},{l:'Instagram',v:'Instagram'},{l:'Facebook',v:'Facebook'},{l:'Bouche à oreille',v:'Bouche à oreille'},{l:'Autre',v:'Autre'}]},
+    {key:'name',bot:"Et pour finir, à quel prénom dois-je transmettre votre demande ?",ph:'Votre prénom'}
+  ];
+  var state={},step=0,started=false;
+
+  function scroll(){body.scrollTop=body.scrollHeight;}
+  function addUser(t){var d=document.createElement('div');d.className='chat-msg user';d.textContent=t;body.appendChild(d);scroll();}
+  function addBotNode(node){body.appendChild(node);scroll();}
+  function typing(cb){
+    var t=document.createElement('div');t.className='chat-typing';t.innerHTML='<i></i><i></i><i></i>';
+    body.appendChild(t);scroll();
+    setTimeout(function(){t.remove();cb();},650);
+  }
+  function addBot(t,cb){typing(function(){var d=document.createElement('div');d.className='chat-msg bot';d.innerHTML=t;body.appendChild(d);scroll();if(cb)cb();});}
+  function clearQuick(){quick.innerHTML='';}
+  function chip(label,fn,ghost){var b=document.createElement('button');if(ghost)b.className='ghost';b.textContent=label;b.onclick=fn;quick.appendChild(b);}
+  function renderQuick(){
+    clearQuick();var s=FLOW[step];
+    if(s.quick)s.quick.forEach(function(o){chip(o.l,function(){answer(o.v,o.l);});});
+    if(s.optional)chip('Passer ›',function(){answer('','— passé —');},true);
+  }
+
+  function askStep(){
+    var s=FLOW[step];
+    input.placeholder=s.ph||'Écrivez votre message…';
+    var txt=(typeof s.bot==='function')?s.bot(state):s.bot;
+    addBot(txt,function(){renderQuick();});
+  }
+
+  function answer(val,label){
+    var s=FLOW[step];
+    addUser(label||val); state[s.key]=val; clearQuick(); step++;
+    while(step<FLOW.length&&FLOW[step].cond&&!FLOW[step].cond(state))step++;
+    if(step<FLOW.length){askStep();}else{recap();}
+  }
+
+  function recap(){
+    input.placeholder='Écrivez votre message…';
+    var est=ESTIMATES[state.type]||'sur devis personnalisé';
+    var evt=state.type+(state.precision?' — '+state.precision:'');
+    addBot("Merci "+escapeHtml(state.name||'')+" ! Voici votre demande 👇",function(){
+      var rows="<li><span>Événement :</span> "+escapeHtml(evt)+"</li>"+
+        "<li><span>Date :</span> "+escapeHtml(state.date)+"</li>"+
+        "<li><span>Lieu :</span> "+escapeHtml(state.city)+"</li>"+
+        "<li><span>Invités :</span> "+escapeHtml(state.guests)+"</li>";
+      if(state.details)rows+="<li><span>Détails :</span> "+escapeHtml(state.details)+"</li>";
+      rows+="<li><span>Estimation indicative :</span> "+escapeHtml(est)+"</li>";
+      if(state.source)rows+="<li><span>Connu via :</span> "+escapeHtml(state.source)+"</li>";
+      var r=document.createElement('div');r.className='chat-msg bot recap';
+      r.innerHTML="<b>📋 Récapitulatif</b><ul>"+rows+"</ul>";
+      addBotNode(r);
+      addBot("Je transmets tout à DJ Walt — il vous confirme sa disponibilité et un devis. Dernière étape :",function(){
+        var msg="Bonjour DJ Walt ! Demande envoyée via l'assistant du site :%0A"+
+          "• Événement : "+enc(evt)+"%0A• Date : "+enc(state.date)+"%0A• Lieu : "+enc(state.city)+
+          "%0A• Invités : "+enc(state.guests)+
+          (state.details?("%0A• Détails : "+enc(state.details)):"")+
+          (state.source?("%0A• Connu via : "+enc(state.source)):"")+
+          "%0A• Nom : "+enc(state.name)+
+          "%0A%0APouvez-vous me confirmer votre disponibilité et un devis ? Merci !";
+        clearQuick();
+        var a=document.createElement('a');a.className='wa';a.href=WA+msg;a.target='_blank';a.rel='noopener';
+        a.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 0 0-10.3 18l-1.7 6 6.2-1.6A12 12 0 1 0 12 0z"/></svg> Envoyer sur WhatsApp';
+        var rb=document.createElement('button');rb.className='ghost';rb.textContent='↺ Recommencer';rb.onclick=restart;
+        quick.appendChild(a);quick.appendChild(rb);
+      });
+    });
+  }
+
+  function restart(){state={};step=0;body.innerHTML='';clearQuick();askStep();}
+  function enc(s){return encodeURIComponent(s);}
+  function escapeHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+  var mq=window.matchMedia('(max-width:560px)');
+  var vv=window.visualViewport;
+  function fitVV(){
+    if(!vv||!panel.classList.contains('open'))return;
+    if(!mq.matches){panel.style.height='';panel.style.bottom='';return;}
+    var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
+    panel.style.height=(vv.height-16)+'px';
+    panel.style.bottom=(kb+8)+'px';
+  }
+  if(vv){vv.addEventListener('resize',fitVV);vv.addEventListener('scroll',fitVV);}
+
+  function open(){
+    hideBubble();
+    panel.classList.add('open');launch.classList.add('hide');
+    if(!started){started=true;askStep();}
+    fitVV();
+    if(!mq.matches)setTimeout(function(){input.focus();},300);
+  }
+  function close(){
+    panel.classList.remove('open');launch.classList.remove('hide');
+    input.blur();panel.style.height='';panel.style.bottom='';
+  }
+
+  launch.addEventListener('click',open);
+  closeb.addEventListener('click',close);
+  function submitInput(){
+    var v=input.value.trim();if(!v)return;input.value='';
+    if(step<FLOW.length)answer(v);
+  }
+  send.addEventListener('click',submitInput);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')submitInput();});
+  input.addEventListener('focus',function(){setTimeout(function(){fitVV();body.scrollTop=body.scrollHeight;},200);});
+  input.addEventListener('blur',function(){setTimeout(fitVV,200);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))close();});
+
+  /* Bulle d'accroche */
+  var bubble=document.getElementById('chatBubble'),bubbleX=document.getElementById('bubbleX'),bubbleDone=false;
+  function hideBubble(){if(bubble)bubble.classList.remove('show');bubbleDone=true;}
+  if(bubble){
+    setTimeout(function(){if(!bubbleDone&&!panel.classList.contains('open'))bubble.classList.add('show');},4200);
+    bubble.addEventListener('click',function(){open();});
+    bubbleX.addEventListener('click',function(e){e.stopPropagation();hideBubble();});
+    window.addEventListener('scroll',function(){if(window.scrollY>400)hideBubble();},{passive:true});
+  }
 })();
 </script>
 </body>
