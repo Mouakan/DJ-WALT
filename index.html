@@ -433,7 +433,8 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
 .chat-typing i:nth-child(2){animation-delay:.2s}.chat-typing i:nth-child(3){animation-delay:.4s}
 @keyframes typ{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 
-.chat-quick{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 18px 12px;max-height:34vh;overflow-y:auto}
+.chat-quick{display:flex;flex-wrap:wrap;gap:.5rem;padding:2px 18px 12px}
+.chat-quick:empty{display:none}
 .chat-quick button{background:rgba(226,180,76,.08);border:1px solid var(--line-2);color:var(--text);font-size:.84rem;
   padding:.5em 1em;border-radius:100px;cursor:pointer;transition:.25s;font-family:'Instrument Sans'}
 .chat-quick button:hover{background:var(--gold);color:#231702;border-color:var(--gold)}
@@ -806,12 +807,13 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
     var y=window.scrollY;
     header.classList.toggle('scrolled',y>30);
     totop.classList.toggle('show',y>700);
-    socialFloat.classList.toggle('show',y>700);
     if(heroBg&&!reduce&&!touch&&y<900){heroBg.style.transform='translateY('+(y*0.18)+'px)';}
   }
   var ticking=false;
   window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(function(){onScroll();ticking=false;});ticking=true;}},{passive:true});
   onScroll();
+  /* Réseaux : apparition unique, puis stables (plus de clignotement au scroll) */
+  setTimeout(function(){if(socialFloat)socialFloat.classList.add('show');},500);
 
   function toggleMenu(force){
     var open=force!==undefined?force:!document.body.classList.contains('menu-open');
@@ -904,6 +906,7 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
     clearQuick();var s=FLOW[step];
     if(s.quick)s.quick.forEach(function(o){chip(o.l,function(){answer(o.v,o.l);});});
     if(s.optional)chip('Passer ›',function(){answer('','— passé —');},true);
+    requestAnimationFrame(scroll);
   }
 
   function askStep(){
@@ -948,6 +951,7 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
         a.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 0 0-10.3 18l-1.7 6 6.2-1.6A12 12 0 1 0 12 0z"/></svg> Envoyer sur WhatsApp';
         var rb=document.createElement('button');rb.className='ghost';rb.textContent='↺ Recommencer';rb.onclick=restart;
         quick.appendChild(a);quick.appendChild(rb);
+        requestAnimationFrame(scroll);
       });
     });
   }
