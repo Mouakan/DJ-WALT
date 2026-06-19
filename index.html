@@ -64,7 +64,7 @@
   --ease:cubic-bezier(.22,1,.36,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
 body{font-family:'Instrument Sans',system-ui,sans-serif;background:var(--ink);color:var(--text);
   line-height:1.6;font-size:16.5px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
@@ -100,37 +100,66 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
 .btn-wa:hover{transform:translateY(-3px);box-shadow:0 16px 38px -12px rgba(37,211,102,.55)}
 
 /* ================= HEADER ================= */
-.header{position:fixed;inset:0 0 auto 0;z-index:90;transition:.4s var(--ease)}
+.header{position:fixed;inset:0 0 auto 0;z-index:200;transition:.4s var(--ease)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;
   padding:16px clamp(20px,5vw,40px);max-width:1340px;margin:0 auto}
 .header.scrolled{background:rgba(7,7,8,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   border-bottom:1px solid var(--line)}
 .header.scrolled .header-inner{padding-top:11px;padding-bottom:11px}
 .brand{display:flex;align-items:center;gap:.7rem;font-family:'Bricolage Grotesque';font-weight:800;
-  font-size:1.1rem;letter-spacing:.05em;color:#fff}
+  font-size:1.1rem;letter-spacing:.05em;color:#fff;position:relative;z-index:2}
 .brand img{height:42px;width:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
 .nav{display:flex;align-items:center;gap:2rem}
 .nav a{font-size:.92rem;color:var(--muted);position:relative;transition:color .25s}
 .nav a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--gold);transition:width .3s var(--ease)}
 .nav a:hover{color:#fff}.nav a:hover::after{width:100%}
 .nav-cta{display:flex;align-items:center;gap:1rem}
-.burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:8px;z-index:101}
-.burger span{width:26px;height:2px;background:#fff;border-radius:2px;transition:.35s var(--ease)}
+
+/* Hamburger : dans le header (z-index 200), donc toujours visible ET cliquable, même menu ouvert */
+.burger{display:none;position:relative;z-index:3;width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line-2);background:rgba(7,7,8,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;transition:.3s var(--ease)}
+.burger:hover{border-color:var(--gold)}
+.burger span{width:20px;height:2px;background:#fff;border-radius:2px;transition:.35s var(--ease);transform-origin:center}
+.menu-open .burger{background:var(--gold);border-color:var(--gold)}
+.menu-open .burger span{background:#231702}
 .menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .menu-open .burger span:nth-child(2){opacity:0}
 .menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.drawer{position:fixed;inset:0;z-index:95;background:rgba(6,6,7,.97);backdrop-filter:blur(8px);
-  display:flex;flex-direction:column;justify-content:center;gap:.2rem;padding:0 9vw;
+
+/* Fond assombri (clic pour fermer) */
+.menu-backdrop{position:fixed;inset:0;z-index:170;background:rgba(4,4,5,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
   opacity:0;visibility:hidden;transition:.4s var(--ease)}
-.menu-open .drawer{opacity:1;visibility:visible}
-.drawer a{font-family:'Bricolage Grotesque';font-size:clamp(1.7rem,7vw,2.5rem);font-weight:700;color:#fff;
-  padding:.32rem 0;border-bottom:1px solid var(--line);opacity:0;transform:translateY(14px);transition:.4s var(--ease)}
-.menu-open .drawer a{opacity:1;transform:none}
-.menu-open .drawer a:nth-child(1){transition-delay:.05s}.menu-open .drawer a:nth-child(2){transition-delay:.09s}
-.menu-open .drawer a:nth-child(3){transition-delay:.13s}.menu-open .drawer a:nth-child(4){transition-delay:.17s}
-.menu-open .drawer a:nth-child(5){transition-delay:.21s}.menu-open .drawer a:nth-child(6){transition-delay:.25s}
-.drawer-foot{display:flex;gap:1rem;margin-top:1.8rem;opacity:0;transform:translateY(14px);transition:.5s .3s var(--ease)}
-.menu-open .drawer-foot{opacity:1;transform:none}
+.menu-open .menu-backdrop{opacity:1;visibility:visible}
+
+/* Panneau latéral */
+.menu{position:fixed;top:0;right:0;bottom:0;z-index:180;width:min(87vw,372px);display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#111016,#09090c);border-left:1px solid var(--line-2);
+  box-shadow:-34px 0 90px -34px rgba(0,0,0,.75);overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(env(safe-area-inset-top) + 94px) clamp(24px,7vw,38px) calc(env(safe-area-inset-bottom) + 26px);
+  transform:translateX(101%);transition:transform .42s var(--ease)}
+.menu-open .menu{transform:none}
+.menu-label{font-family:'DM Mono';font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.1rem;display:block}
+.menu-links{display:flex;flex-direction:column}
+.menu-link{display:flex;align-items:center;gap:.9rem;padding:1.05rem 0;border-bottom:1px solid var(--line);
+  font-family:'Bricolage Grotesque';font-weight:600;font-size:1.5rem;color:#fff;letter-spacing:-.01em;
+  transition:color .25s var(--ease),padding-left .25s var(--ease)}
+.menu-open .menu-link{animation:menuIn .45s var(--ease) backwards}
+@keyframes menuIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.menu-open .menu-link:nth-child(1){animation-delay:.06s}.menu-open .menu-link:nth-child(2){animation-delay:.11s}
+.menu-open .menu-link:nth-child(3){animation-delay:.16s}.menu-open .menu-link:nth-child(4){animation-delay:.21s}
+.menu-open .menu-link:nth-child(5){animation-delay:.26s}.menu-open .menu-link:nth-child(6){animation-delay:.31s}
+.menu-link .idx{font-family:'DM Mono';font-size:.72rem;color:var(--gold);opacity:.85;min-width:22px}
+.menu-link .arr{margin-left:auto;color:var(--gold);opacity:0;transform:translateX(-6px);transition:.25s var(--ease)}
+.menu-link:hover,.menu-link:focus-visible{color:var(--gold);padding-left:.4rem}
+.menu-link:hover .arr,.menu-link:focus-visible .arr{opacity:1;transform:none}
+.menu-foot{margin-top:auto;padding-top:1.8rem;display:flex;flex-direction:column;gap:.7rem}
+.menu-foot .btn{width:100%}
+.menu-social{display:flex;gap:.6rem;margin-top:.7rem;justify-content:center}
+.menu-social a{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;transition:.3s var(--ease)}
+.menu-social a svg{width:18px;height:18px;color:var(--text)}
+.menu-social a:hover{border-color:var(--gold);background:rgba(226,180,76,.08);transform:translateY(-2px)}
 
 /* ================= HERO ================= */
 .hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:130px 0 70px}
@@ -482,23 +511,32 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
     </nav>
     <div class="nav-cta">
       <a class="btn btn-gold" href="https://wa.me/33652627773?text=Bonjour%20DJ%20Walt%2C%20je%20souhaite%20r%C3%A9server%20une%20date.">Réserver</a>
-      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
 
-<div class="drawer" id="drawer">
-  <a href="#accueil">Accueil</a>
-  <a href="#apropos">À propos</a>
-  <a href="#prestations">Prestations</a>
-  <a href="#galerie">Galerie</a>
-  <a href="#avis">Avis</a>
-  <a href="#contact">Contact</a>
-  <div class="drawer-foot">
-    <a class="btn btn-gold" href="https://wa.me/33652627773?text=Bonjour%20DJ%20Walt%2C%20je%20souhaite%20r%C3%A9server%20une%20date.">Réserver</a>
-    <a class="btn btn-ghost" href="tel:+33652627773">Appeler</a>
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<nav class="menu" id="mobileMenu" aria-label="Menu de navigation" aria-hidden="true">
+  <span class="menu-label">Navigation</span>
+  <div class="menu-links">
+    <a class="menu-link" href="#accueil"><span class="idx">01</span>Accueil<span class="arr" aria-hidden="true">→</span></a>
+    <a class="menu-link" href="#apropos"><span class="idx">02</span>À propos<span class="arr" aria-hidden="true">→</span></a>
+    <a class="menu-link" href="#prestations"><span class="idx">03</span>Prestations<span class="arr" aria-hidden="true">→</span></a>
+    <a class="menu-link" href="#galerie"><span class="idx">04</span>Galerie<span class="arr" aria-hidden="true">→</span></a>
+    <a class="menu-link" href="#avis"><span class="idx">05</span>Avis<span class="arr" aria-hidden="true">→</span></a>
+    <a class="menu-link" href="#contact"><span class="idx">06</span>Contact<span class="arr" aria-hidden="true">→</span></a>
   </div>
-</div>
+  <div class="menu-foot">
+    <a class="btn btn-gold" href="https://wa.me/33652627773?text=Bonjour%20DJ%20Walt%2C%20je%20souhaite%20r%C3%A9server%20une%20date.">Réserver ma date</a>
+    <a class="btn btn-ghost" href="tel:+33652627773">Appeler</a>
+    <div class="menu-social">
+      <a href="https://www.facebook.com/profile.php?id=100092229572504" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+      <a href="https://www.instagram.com/djwal_t/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/></svg></a>
+      <a href="https://wa.me/33652627773" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 0 0-10.3 18l-1.7 6 6.2-1.6A12 12 0 1 0 12 0z"/></svg></a>
+    </div>
+  </div>
+</nav>
 
 <!-- ================= HERO ================= -->
 <section class="hero">
@@ -815,14 +853,18 @@ h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;line-height:1.03;letter
   /* Réseaux : apparition unique, puis stables (plus de clignotement au scroll) */
   setTimeout(function(){if(socialFloat)socialFloat.classList.add('show');},500);
 
-  function toggleMenu(force){
-    var open=force!==undefined?force:!document.body.classList.contains('menu-open');
+  var menuBack=document.getElementById('menuBackdrop'),menuEl=document.getElementById('mobileMenu');
+  function setMenu(open){
     document.body.classList.toggle('menu-open',open);
     burger.setAttribute('aria-expanded',open);
+    burger.setAttribute('aria-label',open?'Fermer le menu':'Ouvrir le menu');
+    if(menuEl)menuEl.setAttribute('aria-hidden',open?'false':'true');
     document.body.style.overflow=open?'hidden':'';
   }
-  burger.addEventListener('click',function(){toggleMenu();});
-  document.querySelectorAll('#drawer a').forEach(function(a){a.addEventListener('click',function(){toggleMenu(false);});});
+  burger.addEventListener('click',function(){setMenu(!document.body.classList.contains('menu-open'));});
+  if(menuBack)menuBack.addEventListener('click',function(){setMenu(false);});
+  document.querySelectorAll('#mobileMenu a').forEach(function(a){a.addEventListener('click',function(){setMenu(false);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('menu-open'))setMenu(false);});
 
   totop.addEventListener('click',function(){window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});});
 
